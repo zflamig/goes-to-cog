@@ -72,7 +72,7 @@ def lambdaHandler(event, context):
         target_prefix = "GOES17/F/"
 
     filename = "CH{}-{}-{}-{}.tif".format(channel, realdate)
-    path = product["netcdf"].format(s3path.format(bucket, netcdf))
+    path = 'NETCDF:{}:CMI'.format(s3path.format(bucket, netcdf))
     ds = gdal.Open(path)
     ds = gdal.Translate(
         "/vsimem/tmp.tif",
