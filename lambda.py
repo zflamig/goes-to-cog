@@ -64,11 +64,11 @@ def lambdaHandler(event, context):
     if "_G16_" in netcdf:
         print("Processing GOES-16 file", realdate)
         src_srs.ImportFromProj4(goese_srs)
-        target_prefix = "GOES16/F/"
+        target_prefix = "GOES16"
     elif "_G17_" in netcdf:
         print("Processing GOES-17 file", realdate)
         src_srs.ImportFromProj4(goesw_srs)
-        target_prefix = "GOES17/F/"
+        target_prefix = "GOES17"
 
     filename = "CH{}-{}.tif".format(channel, realdate)
     path = 'NETCDF:{}:CMI'.format(s3path.format(bucket, netcdf))
@@ -96,7 +96,7 @@ def lambdaHandler(event, context):
         boto3.client("s3").upload_file(
             "/tmp/" + filename,
             TARGET_BUCKET,
-            "{}/{}/{}".format(target_prefix, channel, filename),
+            "{}/{}/{}/{}".format(target_prefix, sector, channel, filename),
         )
         os.remove("/tmp/" + filename)
 
