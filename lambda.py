@@ -93,7 +93,7 @@ def lambdaHandler(event, context):
         warpOptions=["SOURCE_EXTRA=1000"],
         creationOptions=["COMPRESS=DEFLATE"],
     )
-    vsifile = gdal.VSIFOpenL(vsipath, b"r")
+    vsifile = gdal.VSIFOpenL(vsipath, "rb")
     with open("/tmp/" + filename, "w") as f:
         f.write(gdal.VSIFReadL(gdal.VSIStatL(vsipath).size, 1, vsifile))
     gdal.VSIFCloseL(vsifile)
