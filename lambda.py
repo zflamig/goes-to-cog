@@ -70,7 +70,7 @@ def lambdaHandler(event, context):
         src_srs.ImportFromProj4(goesw_srs)
         target_prefix = "GOES17/F/"
 
-    filename = "CH{}-{}-{}-{}.tif".format(channel, realdate)
+    filename = "CH{}-{}.tif".format(channel, realdate)
     path = 'NETCDF:{}:CMI'.format(s3path.format(bucket, netcdf))
     ds = gdal.Open(path)
     ds = gdal.Translate(
