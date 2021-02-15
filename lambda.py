@@ -10,6 +10,7 @@ TARGET_BUCKET = os.environ.get("TARGET_BUCKET", None)
 goese_srs = "+proj=geos +lon_0=-75 +h=35786023 +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs  +sweep=x"
 goesw_srs = "+proj=geos +lon_0=-137 +h=35786023 +x_0=0 +y_0=0 +ellps=GRS80 +units=m +no_defs  +sweep=x +over"
 
+
 def response():
     response = {
         "statusCode": 200,
@@ -71,7 +72,7 @@ def lambdaHandler(event, context):
         target_prefix = "GOES17"
 
     filename = "{}.tif".format(realdate)
-    path = 'NETCDF:{}:CMI'.format(s3path.format(bucket, netcdf))
+    path = "NETCDF:{}:CMI".format(s3path.format(bucket, netcdf))
     ds = gdal.Open(path)
     ds = gdal.Translate(
         "/vsimem/tmp.tif",
@@ -80,8 +81,9 @@ def lambdaHandler(event, context):
         outputType=gdal.GDT_Float32,
         outputSRS=src_srs,
     )
+    vsipath = "/vsimem/" + filename
     ds = gdal.Warp(
-        "/tmp/" + filename,
+        vsipath,
         ds,
         srcSRS=src_srs,
         dstSRS=dst_srs,
@@ -91,6 +93,10 @@ def lambdaHandler(event, context):
         warpOptions=["SOURCE_EXTRA=1000"],
         creationOptions=["COMPRESS=DEFLATE"],
     )
+    vsifile = gdal.VSIFOpenL(vsipath, b"r")
+    with open("/tmp/" + filename, "w") as f:
+        f.write(gdal.VSIFReadL(gdal.VSIStatL(vsipath).size, 1, vsifile))
+    gdal.VSIFCloseL(vsifile)
     ds = None
     if TARGET_BUCKET is not None:
         boto3.client("s3").upload_file(
