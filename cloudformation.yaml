@@ -445,7 +445,7 @@ Resources:
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrDockerRepository}:latest
       Timeout: 300
-      MemorySize: 2048
+      MemorySize: 4096
       Environment:
         Variables:
           TARGET_BUCKET: !Ref "COGArtifactBucket"
