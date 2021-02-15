@@ -58,7 +58,6 @@ def lambdaHandler(event, context):
     sector = n.group(2)
     channel = n.group(3)
 
-    src_srs = None
     target_prefix = ""
     s3path = "/vsicurl/https://{}.s3.amazonaws.com/{}"
 
