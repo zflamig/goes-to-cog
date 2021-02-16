@@ -32,8 +32,8 @@ def lambdaHandler(event, context):
     key = s3_event["object"]["key"]
     print("Handling", key)
 
-    # Only process level 2 ABI full disks right now
-    if not key.startswith("ABI-L2-CMIPF"):
+    # Only process level 2 ABI right now
+    if not key.startswith("ABI-L2-CMIP"):
         return response()
 
     netcdf = key
