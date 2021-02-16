@@ -91,7 +91,8 @@ def lambdaHandler(event, context):
         dstNodata=-9999,
         multithread=True,
         warpOptions=["SOURCE_EXTRA=1000", "NUM_THREADS=ALL_CPUS"],
-        creationOptions=["COMPRESS=DEFLATE", "OVERVIEWS=NONE"],
+        creationOptions=["COMPRESS=DEFLATE", "OVERVIEWS=NONE", "NUM_THREADS=ALL_CPUS"],
+        transformerOptions=["NUM_THREADS=ALL_CPUS"],
     )
 
     if TARGET_BUCKET is not None:
@@ -99,7 +100,7 @@ def lambdaHandler(event, context):
         boto3.client("s3").put_object(
             Body=gdal.VSIFReadL(gdal.VSIStatL(vsipath).size, 1, vsifile),
             Bucket=TARGET_BUCKET,
-            Key="{}/{}/{}/{}".format(target_prefix, sector, channel, filename)
+            Key="{}/{}/{}/{}".format(target_prefix, sector, channel, filename),
         )
         gdal.VSIFCloseL(vsifile)
     ds = None
