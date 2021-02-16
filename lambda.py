@@ -93,17 +93,15 @@ def lambdaHandler(event, context):
         warpOptions=["SOURCE_EXTRA=1000"],
         creationOptions=["COMPRESS=DEFLATE"],
     )
-    vsifile = gdal.VSIFOpenL(vsipath, "rb")
-    with open("/tmp/" + filename, "wb") as f:
-        f.write(gdal.VSIFReadL(gdal.VSIStatL(vsipath).size, 1, vsifile))
-    gdal.VSIFCloseL(vsifile)
-    ds = None
+
     if TARGET_BUCKET is not None:
-        boto3.client("s3").upload_file(
-            "/tmp/" + filename,
-            TARGET_BUCKET,
-            "{}/{}/{}/{}".format(target_prefix, sector, channel, filename),
+        vsifile = gdal.VSIFOpenL(vsipath, "rb")
+        boto3.client("s3").put_object(
+            Body=gdal.VSIFReadL(gdal.VSIStatL(vsipath).size, 1, vsifile),
+            Bucket=TARGET_BUCKET,
+            Key="{}/{}/{}/{}".format(target_prefix, sector, channel, filename)
         )
-        os.remove("/tmp/" + filename)
+        gdal.VSIFCloseL(vsifile)
+    ds = None
 
     return response()
