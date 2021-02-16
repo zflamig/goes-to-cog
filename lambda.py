@@ -30,7 +30,7 @@ def lambdaHandler(event, context):
 
     bucket = s3_event["bucket"]["name"]
     key = s3_event["object"]["key"]
-    print("Handling", key)
+    print("Handling", event, key)
 
     # Only process level 2 ABI right now
     if not key.startswith("ABI-L2-CMIP"):
