@@ -90,7 +90,7 @@ def lambdaHandler(event, context):
         format="COG",
         dstNodata=-9999,
         multithread=True,
-        warpOptions=["SOURCE_EXTRA=1000"],
+        warpOptions=["SOURCE_EXTRA=1000", "NUM_THREADS=ALL_CPUS"],
         creationOptions=["COMPRESS=DEFLATE", "OVERVIEWS=NONE"],
     )
 
