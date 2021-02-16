@@ -91,7 +91,7 @@ def lambdaHandler(event, context):
         dstNodata=-9999,
         multithread=True,
         warpOptions=["SOURCE_EXTRA=1000"],
-        creationOptions=["COMPRESS=DEFLATE"],
+        creationOptions=["COMPRESS=DEFLATE", "OVERVIEWS=NONE"],
     )
 
     if TARGET_BUCKET is not None:
