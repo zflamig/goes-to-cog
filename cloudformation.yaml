@@ -3,7 +3,7 @@ Parameters:
     Type: String
     Description: GitHub OAuth Token
     MinLength: 40
-    AllowedPattern: "[a-zA-Z0-9]+"
+    AllowedPattern: "[a-zA-Z0-9_]+"
     NoEcho: true
 
   GitSourceRepo:
@@ -472,6 +472,9 @@ Resources:
       Protocol: lambda
       Endpoint: !GetAtt COGLambda.Arn
       TopicArn: !Ref G16SNSArn
+      FilterPolicy: 
+          key:
+            - prefix: "ABI-L2-CMIPF"
 
   COGLambdaRole:
     Type: AWS::IAM::Role
